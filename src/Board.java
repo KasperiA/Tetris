@@ -1,34 +1,61 @@
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
+import java.util.Random;
 
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 public class Board extends JPanel implements KeyListener{
 	
 	private Shape currentShape;
 	private final int blockSize = 30;
 	private int[][] blocks;
+	private Timer timer;
+	private int speed = 500;
+	private Random random;
+	private boolean gameOver;
+	private int boardWidth;
+	private int boardHeight;
 	
 	public Board() {
 		this.addKeyListener(this);
 		this.setFocusable(true);
 		this.requestFocus();
-		this.currentShape = new Shape(5);
 		this.blocks = new int[20][10];
+		this.random = new Random();
+		this.gameOver = false;
+		this.boardWidth = 300;
+		this.boardHeight = 600;
+		
+		this.timer = new Timer(speed, new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				moveDown();
+				
+				if(currentShape.hasFinishedFalling()) {
+					addNewShape();
+					checkFullRows();
+				}
+				repaint();
+			}
+			
+		});		
+		
+		addNewShape();
 		this.setBlocks(this.currentShape.getCoords(this.currentShape.getRotation()));
-		this.blocks[0][0] = 1;
-		this.blocks[0][1] = 2;
-		this.blocks[0][2] = 3;
-		this.blocks[0][3] = 4;
-		this.blocks[0][4] = 5;
-		this.blocks[0][5] = 6;
-		this.blocks[0][6] = 7;
+		this.timer.start();
+
 	}
+	
 	
 	
 	public void paintComponent(Graphics g) {
@@ -43,6 +70,28 @@ public class Board extends JPanel implements KeyListener{
 			}
 		}
 		
+		if (this.gameOver) {
+			g.setColor(Color.BLACK);
+			g.setFont(new Font("TimesRoman", Font.PLAIN, 40));
+			g.drawString("GAME OVER", this.boardWidth / 10, this.boardHeight / 2);
+		}
+		
+	}
+	
+	private void addNewShape() {
+		this.currentShape = new Shape(this.random.nextInt(6) + 1);
+		System.out.println("\naddnewshape : " + this.currentShape.getShape());
+		this.checkIfGameOver();
+	}
+	
+	
+	private void checkIfGameOver() {
+		for (Point p : this.currentShape.getCoords(this.currentShape.getRotation())) {
+			System.out.println(this.blocks[(int) p.getY() + this.currentShape.getY()][(int) p.getX() + this.currentShape.getX()] != 0);
+			if (this.blocks[(int) p.getY() + this.currentShape.getY()][(int) p.getX() + this.currentShape.getX()] != 0) {
+				this.gameOver();
+			}
+		}
 	}
 	
 	private Color getColor(int number) {
@@ -80,7 +129,7 @@ public class Board extends JPanel implements KeyListener{
 	
 	@Override 
 	public Dimension getPreferredSize() {
-		return new Dimension(300,600);
+		return new Dimension(this.boardWidth,this.boardHeight);
 	}
 
 	@Override
@@ -90,15 +139,15 @@ public class Board extends JPanel implements KeyListener{
 		switch(key) {
 		case  KeyEvent.VK_LEFT:
 			this.moveToSide(-1);
-			printBlocks();
+			//printBlocks();
 			break;
 		case KeyEvent.VK_RIGHT:
 			this.moveToSide(1);
-			printBlocks();
+			//printBlocks();
 			break;
 		case KeyEvent.VK_DOWN:
 			this.moveDown();
-			printBlocks();
+			//printBlocks();
 			break;
 		case KeyEvent.VK_UP:
 			this.rotateBlock();
@@ -115,32 +164,32 @@ public class Board extends JPanel implements KeyListener{
 	}
 	private ArrayList<Point> getTestCoordinates(ArrayList<Point> blockCoords, int direction, boolean rotation) {
 		ArrayList<Point> oldCoords = new ArrayList<>();
-		System.out.println("old");
+		//System.out.println("old");
 		for(Point p : blockCoords) {
-			System.out.println("(" + ((int) p.getY() + this.currentShape.getY()) + " , " + ((int) p.getX() + this.currentShape.getX()) + ")");
+			//System.out.println("(" + ((int) p.getY() + this.currentShape.getY()) + " , " + ((int) p.getX() + this.currentShape.getX()) + ")");
 			oldCoords.add(new Point(((int) p.getX() + this.currentShape.getX()), ((int) p.getY() + this.currentShape.getY())));
 		}
 		ArrayList<Point> newCoords = new ArrayList<>();
-		System.out.println("new");
+		//System.out.println("new");
 		if (rotation) {
 			ArrayList<Point> rotatedCoords = this.currentShape.getCoords(this.currentShape.nextRotation());
 			for(Point p : rotatedCoords) {
 				newCoords.add(new Point((int) p.getX() + this.currentShape.getX(), (int) p.getY() + this.currentShape.getY()));
-				System.out.println("(" + ((int) p.getX()) + " , " + (int) p.getY() + ")");
+				//System.out.println("(" + ((int) p.getX()) + " , " + (int) p.getY() + ")");
 			}
 		}else if(direction == 0) {
 			for(Point p : blockCoords) {
 				newCoords.add(new Point(((int) p.getX() + this.currentShape.getX()), ((int) p.getY() + this.currentShape.getY() + 1)));
-				System.out.println("(" + ((int) p.getY() + this.currentShape.getY() + 1) + " , " + ((int) p.getX() + this.currentShape.getX()) + ")");
+				//System.out.println("(" + ((int) p.getY() + this.currentShape.getY() + 1) + " , " + ((int) p.getX() + this.currentShape.getX()) + ")");
 			}
 		} else {
 			for(Point p : blockCoords) {
-				System.out.println("(" + ((int) p.getY() + this.currentShape.getY()) + " , " + ((int) p.getX() + this.currentShape.getX() + direction) + ")");
+				//System.out.println("(" + ((int) p.getY() + this.currentShape.getY()) + " , " + ((int) p.getX() + this.currentShape.getX() + direction) + ")");
 				newCoords.add(new Point(((int) p.getX() + this.currentShape.getX() + direction), ((int) p.getY() + this.currentShape.getY())));
 			}
 		}
 		
-		System.out.println("check");
+		//System.out.println("check");
 		ArrayList<Point> testCoords = new ArrayList<>();
 		for(Point np : newCoords) {
 			boolean contains = false;
@@ -153,12 +202,48 @@ public class Board extends JPanel implements KeyListener{
 				testCoords.add(new Point((int) np.getX(), (int) np.getY()));
 			}
 		}
-		for(Point p : testCoords) {
-			System.out.println("(" + ((int) p.getY()) + " , " + ((int) p.getX()) + ")");
-		}
+		//for(Point p : testCoords) {
+			//System.out.println("(" + ((int) p.getY()) + " , " + ((int) p.getX()) + ")");
+		//}
 		
 		return testCoords;
 	}
+	
+	
+	private void checkFullRows() {
+		ArrayList<Integer> fullrows = new ArrayList<>();
+		for (int i = 0; i < this.blocks.length; i++) {
+			boolean fullLine = true;
+			for (int j = 0; j < this.blocks[i].length; j++) {
+				if (blocks[i][j] == 0) {
+					fullLine = false;
+				}
+			}
+			if (fullLine) {
+				fullrows.add(i);
+			}
+		}
+		
+		for(int i : fullrows) {
+			for (int j = 0; j < this.blocks[i].length; j++) {
+				this.blocks[i][j] = 0;
+			}
+		}
+		
+		
+		if (fullrows.size() > 0) {
+			removeFullLines(fullrows);
+		}
+	}
+	
+	private void  removeFullLines(ArrayList<Integer> lines) {
+		for(int i = lines.get(0) - 1; i > 0; i--) {
+			for (int j = this.blocks[i].length - 1; j > -1; j--) {
+				this.blocks[i + lines.size()][j] = this.blocks[i][j];
+			}
+		}
+	}
+
 
 	
 	private void moveToSide(int direction) {
@@ -188,10 +273,12 @@ public class Board extends JPanel implements KeyListener{
 			int x = (int) p.getX();
 			int y = (int) p.getY();
 			if (y > 19) {
+				this.currentShape.finishedFalling();
 				return;
 			}
 			
 			if (this.blocks[y][x] != 0) {
+				this.currentShape.finishedFalling();
 				return;
 			}
 		}
@@ -224,16 +311,21 @@ public class Board extends JPanel implements KeyListener{
 		this.setBlocks(this.currentShape.getCoords(this.currentShape.getRotation()));
 	}
 	
+	private void gameOver() {
+		this.gameOver = true;
+		this.timer.stop();
+	}
+	
 	private void setBlocks(ArrayList<Point> blockCoords) {
 		for (Point p : blockCoords) {
-			this.blocks[(int) p.getY() + this.currentShape.getY()][(int) p.getX() + this.currentShape.getX()] = this.currentShape.getShape();
+			this.blocks[(int) p.getY() + this.currentShape.getY()][(int) p.getX() + this.currentShape.getX()] = this.currentShape.getShape();		
 			}
 		}
 
 	private void setToZero(ArrayList<Point> blockCoords) {
 		for (Point p : blockCoords) {
 			this.blocks[(int) p.getY() + this.currentShape.getY()][(int) p.getX() + this.currentShape.getX()] = 0;
-		}
+			}
 	}
 	
 	@Override

@@ -1,4 +1,3 @@
-import java.awt.Color;
 import java.awt.Point;
 import java.util.ArrayList;
 
@@ -9,6 +8,7 @@ public class Shape {
 	private int y;
 	private ArrayList<ArrayList<Point>> coords;
 	private int rotation;
+	private boolean hasFinishedFalling;
 	
 	// shape defines which shape the shape is, x is the main x-coordinate and y is the main y-coordinate
 	public Shape(int shape) {
@@ -18,6 +18,7 @@ public class Shape {
 		this.coords = new ArrayList<ArrayList<Point>>();
 		this.initShape(this.shape);
 		this.rotation = 0;
+		this.hasFinishedFalling = false;
 	}
 	
 	private void initShape(int shape) {
@@ -188,6 +189,14 @@ public class Shape {
 	
 	public int getRotation() {
 		return this.rotation;
+	}
+	
+	public boolean hasFinishedFalling() {
+		return this.hasFinishedFalling;
+	}
+	
+	public void finishedFalling() {
+		this.hasFinishedFalling = true;
 	}
 	
 	
