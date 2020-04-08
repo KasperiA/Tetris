@@ -24,6 +24,7 @@ public class Board extends JPanel implements KeyListener{
 	private boolean gameOver;
 	private int boardWidth;
 	private int boardHeight;
+	private int score;
 	
 	public Board() {
 		this.addKeyListener(this);
@@ -34,17 +35,19 @@ public class Board extends JPanel implements KeyListener{
 		this.gameOver = false;
 		this.boardWidth = 300;
 		this.boardHeight = 600;
+		this.score = 0;
 		
 		this.timer = new Timer(speed, new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				moveDown();
-				
 				if(currentShape.hasFinishedFalling()) {
 					addNewShape();
 					checkFullRows();
 				}
+				moveDown();
+				
+				
 				repaint();
 			}
 			
@@ -56,10 +59,12 @@ public class Board extends JPanel implements KeyListener{
 
 	}
 	
-	
-	
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
+		
+		g.setColor(Color.BLACK);
+		g.setFont(new Font("TimesRoman", Font.PLAIN, 15));
+		g.drawString("Score: " + this.score, 0, 20);
 		
 		for (int i = 0; i < this.blocks.length; i++) {
 			for (int j = 0; j < this.blocks[i].length; j++) {
@@ -242,6 +247,7 @@ public class Board extends JPanel implements KeyListener{
 				this.blocks[i + lines.size()][j] = this.blocks[i][j];
 			}
 		}
+		this.score += 10 * lines.size();
 	}
 
 
@@ -314,6 +320,7 @@ public class Board extends JPanel implements KeyListener{
 	private void gameOver() {
 		this.gameOver = true;
 		this.timer.stop();
+		this.currentShape = new Shape(0);
 	}
 	
 	private void setBlocks(ArrayList<Point> blockCoords) {

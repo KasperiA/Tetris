@@ -14,7 +14,7 @@ public class Shape {
 	public Shape(int shape) {
 		this.shape = shape;
 		this.x = 4;
-		this.y = 1;
+		this.y = 0;
 		this.coords = new ArrayList<ArrayList<Point>>();
 		this.initShape(this.shape);
 		this.rotation = 0;
@@ -23,6 +23,9 @@ public class Shape {
 	
 	private void initShape(int shape) {
 		switch (shape) {
+		case 0:
+			this.initCoords(1);
+			this.coords.get(0).add(new Point(0,0));
 		case 1:
 			this.initCoords(2);
 			this.coords.get(0).add(new Point(0,0));

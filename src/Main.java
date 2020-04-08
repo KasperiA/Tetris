@@ -6,11 +6,11 @@ public class Main {
 		JFrame frame = new JFrame("Tetris");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		frame.setLocationRelativeTo(null);
-		frame.setSize(300, 600);
+		
 		Board tetris = new Board();
 		frame.add(tetris);
 		frame.pack();
+		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 	}
 	
