@@ -5,4 +5,4 @@ stages:
 
 build:
   stage: build
-  script: javac src/Main.java
+  script: javac src/Main.java src/Board.java src/Shape.java
