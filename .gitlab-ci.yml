@@ -5,4 +5,4 @@ stages:
 
 build:
   stage: build
-  script: javac tetris/src/Main.java
+  script: javac /tetris/src/Main.java
