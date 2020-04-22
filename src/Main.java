@@ -2,6 +2,9 @@ import javax.swing.JFrame;
 
 public class Main {
 	
+	/**
+	 * Creates the game window
+	 */
 	private static void createWindow() {
 		JFrame frame = new JFrame("Tetris");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -11,6 +14,7 @@ public class Main {
 		frame.add(tetris);
 		frame.pack();
 		frame.setLocationRelativeTo(null);
+		frame.setResizable(false);
 		frame.setVisible(true);
 	}
 	

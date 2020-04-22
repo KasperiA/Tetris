@@ -21,13 +21,18 @@ public class Shape {
 		this.hasFinishedFalling = false;
 	}
 	
+	/**
+	 * Creates a shape by defining its different rotations coordinates
+	 * @param shape Shapes number
+	 */
+	
 	private void initShape(int shape) {
 		switch (shape) {
-		case 0:
-			this.initCoords(1);
+		case 0: //Empty shape
+			this.createRotationArrayLists(1);
 			this.coords.get(0).add(new Point(0,0));
-		case 1:
-			this.initCoords(2);
+		case 1: // I
+			this.createRotationArrayLists(2);
 			this.coords.get(0).add(new Point(0,0));
 			this.coords.get(0).add(new Point(-1,0));
 			this.coords.get(0).add(new Point(1,0));
@@ -38,15 +43,15 @@ public class Shape {
 			this.coords.get(1).add(new Point(0,1));
 			this.coords.get(1).add(new Point(0,2));
 			break;
-		case 2:
-			this.initCoords(1);
+		case 2: // O
+			this.createRotationArrayLists(1);
 			this.coords.get(0).add(new Point(0,0));
 			this.coords.get(0).add(new Point(1,0));
 			this.coords.get(0).add(new Point(0,1));
 			this.coords.get(0).add(new Point(1,1));
 			break;
-		case 3:
-			this.initCoords(4);
+		case 3: // J
+			this.createRotationArrayLists(4);
 			this.coords.get(0).add(new Point(-1,0));
 			this.coords.get(0).add(new Point(0,0));
 			this.coords.get(0).add(new Point(1,0));
@@ -67,8 +72,8 @@ public class Shape {
 			this.coords.get(3).add(new Point(0,0));
 			this.coords.get(3).add(new Point(0,1));
 			break;
-		case 4:
-			this.initCoords(4);
+		case 4: //L
+			this.createRotationArrayLists(4);
 			this.coords.get(0).add(new Point(-1,1));
 			this.coords.get(0).add(new Point(-1,0));
 			this.coords.get(0).add(new Point(0,0));
@@ -89,8 +94,8 @@ public class Shape {
 			this.coords.get(3).add(new Point(0,1));
 			this.coords.get(3).add(new Point(1,1));
 			break;
-		case 5:
-			this.initCoords(2);
+		case 5: //S
+			this.createRotationArrayLists(2);
 			this.coords.get(0).add(new Point(-1,1));
 			this.coords.get(0).add(new Point(0,1));
 			this.coords.get(0).add(new Point(0,0));
@@ -101,8 +106,8 @@ public class Shape {
 			this.coords.get(1).add(new Point(1,0));
 			this.coords.get(1).add(new Point(1,1));
 			break;
-		case 6:
-			this.initCoords(4);
+		case 6: //T
+			this.createRotationArrayLists(4);
 			this.coords.get(0).add(new Point(-1,0));
 			this.coords.get(0).add(new Point(0,0));
 			this.coords.get(0).add(new Point(0,1));
@@ -123,8 +128,8 @@ public class Shape {
 			this.coords.get(3).add(new Point(0,0));
 			this.coords.get(3).add(new Point(0,1));
 			break;
-		case 7:
-			this.initCoords(2);
+		case 7: // Z
+			this.createRotationArrayLists(2);
 			this.coords.get(0).add(new Point(-1,0));
 			this.coords.get(0).add(new Point(0,0));
 			this.coords.get(0).add(new Point(0,1));
@@ -140,6 +145,35 @@ public class Shape {
 		}
 	}
 	
+	/**
+	 * Returns the coordinates of a shapes specific rotation
+	 * @param rotation The wanted rotation
+	 * @return Point arraylist where one Point is the coordinates of a shapes block
+	 */
+	
+	public ArrayList<Point> getCoords(int rotation) {
+		ArrayList<Point> returnedCoords = new ArrayList<>();
+		for(Point p : this.coords.get(rotation)) {
+			returnedCoords.add(p);
+		}
+		return returnedCoords;
+	}
+	
+	/**
+	 * Creates the ArrayLists for the different rotations
+	 * @param rotations Amount of rotations
+	 */
+	
+	private void createRotationArrayLists(int rotations) {
+		for (int i = 0; i < rotations; i++) {
+			this.coords.add(new ArrayList<Point>());
+		}
+	}
+	
+	/**
+	 * Changes the rotation to the next rotation
+	 */
+	
 	public void changeRotation() {
 		if (this.rotation < this.coords.size() - 1) {
 			this.rotation++;
@@ -147,6 +181,11 @@ public class Shape {
 			this.rotation = 0;
 		}
 	}
+	
+	/**
+	 * Gives the next rotation without changing the current rotation
+	 * @return The next rotation
+	 */
 	
 	public int nextRotation() {
 		if (this.rotation < this.coords.size() - 1) {
@@ -163,25 +202,11 @@ public class Shape {
 	public int getY() {
 		return this.y;
 	}
-	
+
 	public int getShape() {
 		return this.shape;
 	}
-	
-	public ArrayList<Point> getCoords(int rotation) {
-		ArrayList<Point> returnedCoords = new ArrayList<>();
-		for(Point p : this.coords.get(rotation)) {
-			returnedCoords.add(p);
-		}
-		return returnedCoords;
-	}
-	
-	private void initCoords(int size) {
-		for (int i = 0; i < size; i++) {
-			this.coords.add(new ArrayList<Point>());
-		}
-	}
-	
+			
 	public void setX(int x) {
 		this.x = x;
 	}
