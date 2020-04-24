@@ -1,4 +1,5 @@
 package main;
+
 import java.awt.Point;
 import java.util.ArrayList;
 
@@ -11,7 +12,11 @@ public class Shape {
 	private int rotation;
 	private boolean hasFinishedFalling;
 	
-	// shape defines which shape the shape is, x is the main x-coordinate and y is the main y-coordinate
+	/**
+	 * Constructor for Shape
+	 * 
+	 * @param shape Int depending on the shape
+	 */
 	public Shape(int shape) {
 		this.shape = shape;
 		this.x = 4;
@@ -24,14 +29,16 @@ public class Shape {
 	
 	/**
 	 * Creates a shape by defining its different rotations coordinates
+	 * 
 	 * @param shape Shapes number
 	 */
 	
 	private void initShape(int shape) {
 		switch (shape) {
-		case 0: //Empty shape
+		case 0: // Empty shape
 			this.createRotationArrayLists(1);
 			this.coords.get(0).add(new Point(0,0));
+			break;
 		case 1: // I
 			this.createRotationArrayLists(2);
 			this.coords.get(0).add(new Point(0,0));
@@ -148,6 +155,7 @@ public class Shape {
 	
 	/**
 	 * Returns the coordinates of a shapes specific rotation
+	 * 
 	 * @param rotation The wanted rotation
 	 * @return Point arraylist where one Point is the coordinates of a shapes block
 	 */
@@ -162,6 +170,7 @@ public class Shape {
 	
 	/**
 	 * Creates the ArrayLists for the different rotations
+	 * 
 	 * @param rotations Amount of rotations
 	 */
 	

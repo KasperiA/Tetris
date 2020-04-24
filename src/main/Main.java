@@ -1,4 +1,5 @@
 package main;
+
 import javax.swing.JFrame;
 
 public class Main {
@@ -18,7 +19,7 @@ public class Main {
 		frame.setResizable(false);
 		frame.setVisible(true);
 	}
-	
+
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		createWindow();
