@@ -1,8 +1,8 @@
-image: java:latest
+image:maven:latest
 
 stages:
   - build
 
 build:
-  stage: build
-  script: javac src/Main.java src/Board.java src/Shape.java
+  - stage:build
+  - script:-mvn compile
