@@ -94,7 +94,6 @@ public class Board extends JPanel implements KeyListener{
 	 */
 	private void addNewShape() {
 		this.currentShape = new Shape(this.random.nextInt(7) + 1);
-		System.out.println("\naddnewshape : " + this.currentShape.getShape());
 		this.checkIfGameOver();
 	}
 	
@@ -103,7 +102,6 @@ public class Board extends JPanel implements KeyListener{
 	 */
 	private void checkIfGameOver() {
 		for (Point p : this.currentShape.getCoords(this.currentShape.getRotation())) {
-			System.out.println(this.blocks[(int) p.getY() + this.currentShape.getY()][(int) p.getX() + this.currentShape.getX()] != 0);
 			if (this.blocks[(int) p.getY() + this.currentShape.getY()][(int) p.getX() + this.currentShape.getX()] != 0) {
 				this.gameOver();
 			}
@@ -134,19 +132,15 @@ public class Board extends JPanel implements KeyListener{
 		switch(key) {
 		case  KeyEvent.VK_LEFT:
 			this.moveToSide(-1);
-			//printBlocks();
 			break;
 		case KeyEvent.VK_RIGHT:
 			this.moveToSide(1);
-			//printBlocks();
 			break;
 		case KeyEvent.VK_DOWN:
 			this.moveDown();
-			//printBlocks();
 			break;
 		case KeyEvent.VK_UP:
 			this.rotateShape();
-			//printBlocks();
 			break;
 			
 		default:
@@ -363,6 +357,10 @@ public class Board extends JPanel implements KeyListener{
 		default:
 			return new Color(255,255,255); //white
 		}
+	}
+	
+	public int[][] getBoard() {
+		return this.blocks;
 	}
 	
 	@Override 
