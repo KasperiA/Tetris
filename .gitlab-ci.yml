@@ -1,8 +1,6 @@
-image:maven:latest
-
-stages:
-  - build
+image: maven:latest
 
 build:
-  - stage:build
-  - script:-mvn compile
+  stage: build
+  script:
+   - mvn compile
