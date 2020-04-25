@@ -15,7 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 public class Board extends JPanel implements KeyListener{
-	
+
 	private Shape currentShape;
 	private final int blockSize = 30;
 	private int[][] blocks;
@@ -26,7 +26,8 @@ public class Board extends JPanel implements KeyListener{
 	private int boardWidth;
 	private int boardHeight;
 	private int score;
-	
+	private ArrayList<Integer> blockBag;
+
 	/**
 	 * Board constructor, also starts the timer that moves a shape down
 	 */
@@ -40,7 +41,8 @@ public class Board extends JPanel implements KeyListener{
 		this.boardWidth = 300;
 		this.boardHeight = 600;
 		this.score = 0;
-		
+		this.blockBag = new ArrayList<>();
+
 		this.timer = new Timer(speed, new ActionListener() {
 
 			@Override
@@ -52,23 +54,37 @@ public class Board extends JPanel implements KeyListener{
 				moveDown();
 				repaint();
 			}
-			
+
 		});		
-		
+
 		addNewShape();
 		this.setBlocks(this.currentShape.getCoords(this.currentShape.getRotation()));
 		this.timer.start();
 
 	}
-	
+
 	/**
 	 * Adds a new shape and calls checkIfGameOver method
 	 */
 	private void addNewShape() {
-		this.currentShape = new Shape(this.random.nextInt(7) + 1);
+		while (true) {			
+			if (this.blockBag.size() == 7) {
+				this.blockBag = new ArrayList<>();
+			}
+
+			int newShape = this.random.nextInt(7) + 1;			
+			if (this.blockBag.contains(newShape)) {
+				continue;
+			}
+
+			this.blockBag.add(newShape);
+			this.currentShape = new Shape(newShape);
+			break;
+		}
+
 		this.checkIfGameOver();
 	}
-	
+
 	/** 
 	 * Sets a shapes value into the blocks array
 	 * 
@@ -77,9 +93,9 @@ public class Board extends JPanel implements KeyListener{
 	private void setBlocks(ArrayList<Point> blockCoords) {
 		for (Point p : blockCoords) {
 			this.blocks[(int) p.getY() + this.currentShape.getY()][(int) p.getX() + this.currentShape.getX()] = this.currentShape.getShape();		
-			}
 		}
-	
+	}
+
 	/**
 	 * Changes a shapes value to zero in the blocks array
 	 * 
@@ -88,16 +104,16 @@ public class Board extends JPanel implements KeyListener{
 	private void setToZero(ArrayList<Point> blockCoords) {
 		for (Point p : blockCoords) {
 			this.blocks[(int) p.getY() + this.currentShape.getY()][(int) p.getX() + this.currentShape.getX()] = 0;
-			}
+		}
 	}
-	
+
 	/**
 	 * Defines the actions on different key presses
 	 */
 	@Override
 	public void keyPressed(KeyEvent e) {
 		int key = e.getKeyCode();
-		
+
 		switch(key) {
 		case  KeyEvent.VK_LEFT:
 			this.moveToSide(-1);
@@ -111,15 +127,15 @@ public class Board extends JPanel implements KeyListener{
 		case KeyEvent.VK_UP:
 			this.rotateShape();
 			break;
-			
+
 		default:
 			break;
 		}
-		
+
 		repaint();	
-		
+
 	}
-	
+
 	/**
 	 * Tests if the shape can move to side and moves it if possible
 	 * 
@@ -127,14 +143,14 @@ public class Board extends JPanel implements KeyListener{
 	 */
 	private void moveToSide(int direction) {
 		ArrayList<Point> testCoords = this.getTestCoordinates(this.currentShape.getCoords(this.currentShape.getRotation()), direction, false);
-		
+
 		for (Point p : testCoords) {
 			int x = (int) p.getX();
 			int y = (int) p.getY();
 			if (x > 9 || x < 0) {
 				return;
 			}
-			
+
 			if (this.blocks[y][x] != 0) {
 				return;
 			}
@@ -144,13 +160,13 @@ public class Board extends JPanel implements KeyListener{
 		this.currentShape.setX(this.currentShape.getX() + direction);
 		this.setBlocks(this.currentShape.getCoords(this.currentShape.getRotation()));
 	}
-	
+
 	/**
 	 * Tests if the shape can move down and moves it or ends the shapes falling
 	 */
 	private void moveDown() {
 		ArrayList<Point> testCoords = this.getTestCoordinates(this.currentShape.getCoords(this.currentShape.getRotation()), 0, false);
-		
+
 		for (Point p : testCoords) {
 			int x = (int) p.getX();
 			int y = (int) p.getY();
@@ -158,18 +174,18 @@ public class Board extends JPanel implements KeyListener{
 				this.currentShape.finishedFalling();
 				return;
 			}
-			
+
 			if (this.blocks[y][x] != 0) {
 				this.currentShape.finishedFalling();
 				return;
 			}
 		}
-		
+
 		this.setToZero(this.currentShape.getCoords(this.currentShape.getRotation()));
 		this.currentShape.setY(this.currentShape.getY() + 1);
 		this.setBlocks(this.currentShape.getCoords(this.currentShape.getRotation()));
 	}
-	
+
 	/**
 	 * Tests if the shape can be rotated and rotates it if possible
 	 */
@@ -178,25 +194,25 @@ public class Board extends JPanel implements KeyListener{
 		for (Point p : testCoords) {
 			int x = (int) p.getX();
 			int y = (int) p.getY();
-			
+
 			if (y > 19 || y < 0) {
 				return;
 			}
-			
+
 			if (x > 9 || x < 0) {
 				return;
 			}
-			
+
 			if (this.blocks[y][x] != 0) {
 				return;
 			}
 		}
-		
+
 		this.setToZero(this.currentShape.getCoords(this.currentShape.getRotation()));
 		this.currentShape.changeRotation();
 		this.setBlocks(this.currentShape.getCoords(this.currentShape.getRotation()));
 	}
-	
+
 	/**
 	 * Returns the coordinates which needs to be tested when trying to move a shape
 	 * 
@@ -225,7 +241,7 @@ public class Board extends JPanel implements KeyListener{
 				newCoords.add(new Point(((int) p.getX() + this.currentShape.getX() + direction), ((int) p.getY() + this.currentShape.getY())));
 			}
 		}
-		
+
 		ArrayList<Point> testCoords = new ArrayList<>();
 		for(Point np : newCoords) {
 			boolean contains = false;
@@ -240,7 +256,7 @@ public class Board extends JPanel implements KeyListener{
 		}
 		return testCoords;
 	}
-	
+
 	/**
 	 * Checks if there is full rows, sets full rows to zero and moves blocks down
 	 */
@@ -257,23 +273,23 @@ public class Board extends JPanel implements KeyListener{
 				fullrows.add(i);
 			}
 		}
-		
+
 		for(int i : fullrows) {
 			for (int j = 0; j < this.blocks[i].length; j++) {
 				this.blocks[i][j] = 0;
 			}
 		}
-		
+
 		if (fullrows.size() > 0) {
 			for(int i = fullrows.get(0) - 1; i > 0; i--) {
 				for (int j = this.blocks[i].length - 1; j > -1; j--) {
 					this.blocks[i + fullrows.size()][j] = this.blocks[i][j];
 				}
 			}
-			this.score += 10 * fullrows.size();
+			this.score += 10 * fullrows.size() * fullrows.size();
 		}
 	}
-	
+
 	/**
 	 * Checks if the game is over
 	 */
@@ -284,7 +300,7 @@ public class Board extends JPanel implements KeyListener{
 			}
 		}
 	}
-	
+
 	/**
 	 * Ends the game
 	 */
@@ -293,7 +309,7 @@ public class Board extends JPanel implements KeyListener{
 		this.timer.stop();
 		this.currentShape = new Shape(0);
 	}
-	
+
 	/**
 	 * Draws the blocks and texts in game
 	 * 
@@ -301,11 +317,11 @@ public class Board extends JPanel implements KeyListener{
 	 */
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		
+
 		g.setColor(Color.BLACK);
 		g.setFont(new Font("SansSerif", Font.PLAIN, 15));
 		g.drawString("Score: " + this.score, 0, 20);
-		
+
 		for (int r = 0; r < this.blocks.length; r++) {
 			for (int c = 0; c < this.blocks[r].length; c++) {
 				if (this.blocks[r][c] != 0) {
@@ -314,15 +330,15 @@ public class Board extends JPanel implements KeyListener{
 				}
 			}
 		}
-		
+
 		if (this.gameOver) {
 			g.setColor(Color.BLACK);
 			g.setFont(new Font("SansSerif", Font.PLAIN, 40));
 			g.drawString("GAME OVER", this.boardWidth / 10, this.boardHeight / 2);
 		}
-		
+
 	}
-	
+
 	/**
 	 * Get the color of a shape
 	 * 
@@ -349,21 +365,21 @@ public class Board extends JPanel implements KeyListener{
 			return new Color(255,255,255); //white
 		}
 	}
-	
+
 	public int[][] getBoard() {
 		return this.blocks;
 	}
-	
+
 	@Override 
 	public Dimension getPreferredSize() {
 		return new Dimension(this.boardWidth,this.boardHeight);
 	}
-	
+
 	// Required but not used methods
 	@Override
 	public void keyReleased(KeyEvent e) {		
 	}
-	
+
 	@Override
 	public void keyTyped(KeyEvent e) {		
 	}
