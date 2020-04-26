@@ -15,7 +15,7 @@ public class Shape {
 	/**
 	 * Constructor for Shape
 	 * 
-	 * @param shape Int depending on the shape
+	 * @param shape The shape
 	 */
 	public Shape(int shape) {
 		this.shape = shape;
@@ -32,7 +32,6 @@ public class Shape {
 	 * 
 	 * @param shape Shapes number
 	 */
-
 	private void initShape(int shape) {
 		switch (shape) {
 		case 0: // Empty shape
@@ -157,9 +156,8 @@ public class Shape {
 	 * Returns the coordinates of a shapes specific rotation
 	 * 
 	 * @param rotation The wanted rotation
-	 * @return Point arraylist where one Point is the coordinates of a shapes block
+	 * @return ArrayList<Point> one Point is the coordinates of a shapes block
 	 */
-
 	public ArrayList<Point> getCoords(int rotation) {
 		ArrayList<Point> returnedCoords = new ArrayList<>();
 		for(Point p : this.coords.get(rotation)) {
@@ -173,7 +171,6 @@ public class Shape {
 	 * 
 	 * @param rotations Amount of rotations
 	 */
-
 	private void createRotationArrayLists(int rotations) {
 		for (int i = 0; i < rotations; i++) {
 			this.coords.add(new ArrayList<Point>());
@@ -183,7 +180,6 @@ public class Shape {
 	/**
 	 * Changes the rotation to the next rotation
 	 */
-
 	public void changeRotation() {
 		if (this.rotation < this.coords.size() - 1) {
 			this.rotation++;
@@ -194,9 +190,9 @@ public class Shape {
 
 	/**
 	 * Gives the next rotation without changing the current rotation
-	 * @return The next rotation
+	 * 
+	 * @return int The next rotation
 	 */
-
 	public int nextRotation() {
 		if (this.rotation < this.coords.size() - 1) {
 			return this.rotation + 1;
@@ -205,34 +201,72 @@ public class Shape {
 		}
 	}
 
+	/**
+	 * Return the main x-coordinate
+	 * 
+	 * @return int Main x-coordinate
+	 */
 	public int getX() {
 		return this.x;
 	}
 
+	/**
+	 * Return the main y-coordinate
+	 * 
+	 * @return int Main y-coordinate
+	 */
 	public int getY() {
 		return this.y;
 	}
 
+	/**
+	 * Return the shape
+	 * 
+	 * @return int The shape
+	 */
 	public int getShape() {
 		return this.shape;
 	}
 
+	/**
+	 * Return the rotation of the shape
+	 * 
+	 * @return int rotation of the shape
+	 */
+	public int getRotation() {
+		return this.rotation;
+	}
+	
+	/**
+	 * Set the main x-coordinate
+	 * 
+	 * @param x main x-coordinate
+	 */
 	public void setX(int x) {
 		this.x = x;
 	}
 
+	/**
+	 * Set the main y-coordinate
+	 * 
+	 * @param y main y-coordinate
+	 */
 	public void setY(int y) {
 		this.y = y;
 	}
 
-	public int getRotation() {
-		return this.rotation;
-	}
-
+	/**
+	 * Return has the shape finished falling
+	 * 
+	 * @return boolean has the shape finished falling
+	 */
 	public boolean hasFinishedFalling() {
 		return this.hasFinishedFalling;
 	}
 
+	/**
+	 * The shape has finished falling
+	 */
 	public void finishedFalling() {
 		this.hasFinishedFalling = true;
 	}

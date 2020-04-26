@@ -217,8 +217,8 @@ public class Board extends JPanel implements KeyListener{
 	 * Returns the coordinates which needs to be tested when trying to move a shape
 	 * 
 	 * @param blockCoords A shapes current blocks coordinates
-	 * @param direction
-	 * @param rotation
+	 * @param direction -1 if left, 1 if right, 0 if down or rotated
+	 * @param rotation true if rotated
 	 * @return ArrayList<Point> The arraylist contains the testcoordinates
 	 */
 	private ArrayList<Point> getTestCoordinates(ArrayList<Point> blockCoords, int direction, boolean rotation) {
@@ -343,7 +343,7 @@ public class Board extends JPanel implements KeyListener{
 	 * Get the color of a shape
 	 * 
 	 * @param shape Shapes number
-	 * @return Shapes color
+	 * @return Color Shapes color
 	 */
 	private Color getColor(int shape) {
 		switch (shape) {
@@ -366,10 +366,20 @@ public class Board extends JPanel implements KeyListener{
 		}
 	}
 
+	/**
+	 * Returns the array containing blocks
+	 * 
+	 * @return int[][] array containing blocks
+	 */
 	public int[][] getBoard() {
 		return this.blocks;
 	}
 
+	/**
+	 * Returns the dimension of the board
+	 * 
+	 * @return Dimension
+	 */
 	@Override 
 	public Dimension getPreferredSize() {
 		return new Dimension(this.boardWidth,this.boardHeight);
